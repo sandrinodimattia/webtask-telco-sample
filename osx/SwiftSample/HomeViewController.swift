@@ -22,12 +22,17 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
     }
     
+    /*
+     * If the user is logged in, show the profile.
+     * If not, show the login page.
+     */
     override func viewWillAppear(animated: Bool) {
         let keychain = MyApplication.sharedInstance.keychain
         let idToken = keychain.stringForKey("id_token")
         if (idToken != nil) {
+            println("ID token: " + idToken)
+            
             if (!A0JWTDecoder.isJWTExpired(idToken)) {
-                
                 let keychain = MyApplication.sharedInstance.keychain
                 let profileData:NSData! = keychain.dataForKey("profile")
                 let profile:A0UserProfile = NSKeyedUnarchiver.unarchiveObjectWithData(profileData) as A0UserProfile
@@ -36,7 +41,6 @@ class HomeViewController: UIViewController {
                 self.textName?.text = profile.name
                 self.textEmail?.text = profile.email
                 self.textHomeID?.text = profile.extraInfo["home_id"] as? String
-                println("ID token: " + idToken)
                 return
             }
         }
@@ -61,12 +65,18 @@ class HomeViewController: UIViewController {
         logout(self)
     }
     
+    /*
+     * Logout.
+     */
     @IBAction func logout(sender: AnyObject) {
         MyApplication.sharedInstance.keychain.clearAll()
         A0SimpleKeychain().clearAll()
         self.showLogin()
     }
     
+    /*
+     * Show the Lock
+     */
     func showLogin() {
         // Customize theme.
         let theme = A0Theme()
@@ -82,6 +92,8 @@ class HomeViewController: UIViewController {
 
             // Need to complete profile?
             if let completeProfileUrl = profile.extraInfo["complete_profile_url"] as? String {
+                println("Webtask Url: " + completeProfileUrl)
+                
                 self.completeProfileUrl = completeProfileUrl
                 self.performSegueWithIdentifier("completeProfile", sender: self)
                 self.dismissViewControllerAnimated(true, completion: nil)
