@@ -1,5 +1,4 @@
 return function(context, req, res) {
-  console.log('Context:', context);
   console.log('User:', context.data.user);
   console.log('Body:', context.body);
   console.log('Url:', req.url);
@@ -160,7 +159,7 @@ function updateUserProfile(auth0_token, user_id, home_id, callback) {
       return callback(new Error('Auth0: Error updating user. HTTP status ' + res.statusCode));
     if (!body || typeof body !== 'object')
       return callback(new Error('Auth0: Error updating user. Invalid response body.'));
-    return callback(body.access_token);
+    return callback();
   });
 
 }
