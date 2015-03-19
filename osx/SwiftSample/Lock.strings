@@ -1,0 +1,83 @@
+/* 
+  Lock.strings
+  TelcoMobile
+
+  Created by Sandrino Di Mattia on 18/03/15.
+  Copyright (c) 2015 Auth0. All rights reserved.
+*/
+
+
+"ACCESS" = "Login with your Telco ID";
+"ALREADY HAVE AN ACCOUNT?" = "ALREADY HAVE AN ACCOUNT?";
+"CANCEL" = "CANCEL";
+"Cancel" = "Cancel";
+"Login with %@" = "Login with %@";
+"OK" = "OK";
+"RESET PASSWORD" = "RESET PASSWORD";
+"SEND" = "SEND";
+"SIGN UP" = "SIGN UP";
+"Retry" = "Retry";
+
+"Confirm New Password" = "Confirm New Password";
+"Password" = "Password";
+"Email" = "Email";
+"Username" = "Username";
+"Please enter your email" = "Please enter your email";
+
+/* Screen Titles */
+"OR" = "or";
+"Login" = "Use a Social Network";
+"Register" = "Register";
+"Reset Password" = "Reset Password";
+"Sign Up" = "Sign Up";
+"Login with TouchID" = "Login with TouchID";
+
+/* Messages */
+
+"Please enter your corporate credentials at %@" = "Please enter your corporate credentials at %@";
+"Please enter your email and password" = "Please enter your email and password";
+"Please enter your email and the new password. We will send you an email to confirm the password change." = "Please enter your email and the new password. We will send you an email to confirm the password change.";
+"We've just sent you an email to reset your password." = "We've just sent you an email to reset your password.";
+
+/* User Input Error messages */
+
+"Invalid credentials" = "Invalid credentials";
+"Invalid login credentials" = "Invalid login credentials";
+"The email you entered is invalid. Please try again." = "The email you entered is invalid. Please try again.";
+"The password you entered is invalid. Please try again." = "The password you entered is invalid. Please try again.";
+"The passwords you entered must match. Please try again." = "The passwords you entered must match. Please try again.";
+"The email and password you entered are invalid. Please try again." = "The email and password you entered are invalid. Please try again.";
+"The username and password you entered are invalid. Please try again." = "The username and password you entered are invalid. Please try again.";
+"The username you entered is invalid. Please try again." = "The username you entered is invalid. Please try again.";
+
+/* Error messages */
+"Authentication failed" = "Authentication failed";
+"There was an error contacting Facebook" = "There was an error contacting Facebook";
+"There was an error contacting Twitter" = "There was an error contacting Twitter";
+"There was an error logging in" = "There was an error logging in";
+"There was an error processing the reset password." = "There was an error processing the reset password.";
+"There was an error processing the sign in." = "There was an error processing the sign in.";
+"There was an error processing the sign up." = "There was an error processing the sign up.";
+"There was an error signing up" = "There was an error signing up";
+"There was an error contacting %@" = "There was an error contacting %@";
+"Can't find connection name to use for authentication" = "Can't find connection name to use for authentication";
+"Couldn't authenticate with TouchID. Please try again later!." = "Couldn't authenticate with TouchID. Please try again later!.";
+"Couldn't change your password" = "Couldn't change your password";
+"Couldn't found authentication method for unknown strategy" = "Couldn't found authentication method for unknown strategy";
+"Couldn't start authentication using Safari" = "Couldn't start authentication using Safari";
+"Permissions were not granted. Please authorize the app in Settings > Twitter" = "Permissions were not granted. Please authorize the app in Settings > Twitter";
+"Permissions were not granted. Try again" = "Permissions were not granted. Try again";
+"The domain has not been setup for Twitter." = "The domain has not been setup for Twitter.";
+"The strategy %@ has no registered authentication provider" = "The strategy %@ has no registered authentication provider";
+"The twitter account seems to be invalid. Please check it in Settings > Twitter and re-enter them." = "The twitter account seems to be invalid. Please check it in Settings > Twitter and re-enter them.";
+"The user already exists." = "The user already exists.";
+"There was no connection configured for the domain" = "There was no connection configured for the domain";
+"User cancelled the login operation. Try again" = "User cancelled the login operation. Try again";
+"Wrong email or password." = "Wrong email or password.";
+"You need to authorize the application" = "You need to authorize the application";
+"You need to configure your auth0 scheme in CFBundleURLTypes in your app's Info.plist file" = "You need to configure your auth0 scheme in CFBundleURLTypes in your app's Info.plist file";
+"The application isn't configured properly for %@. Please check your Auth0's application configuration" = "The application isn't configured properly for %@. Please check your Auth0's application configuration";
+"The server could not be contacted" = "The server could not be contacted";
+"Make sure your network settings are correct and your network connection is active, or try again later." = "Make sure your network settings are correct and your network connection is active, or try again later.";
+"Failed to display login" = "Failed to display login";
+"Couldnt get login screen configuration. Please try again." = "Couldnt get login screen configuration. Please try again.";

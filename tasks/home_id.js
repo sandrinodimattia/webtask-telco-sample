@@ -86,13 +86,12 @@ return function(context, req, res) {
           return callback(err);
         }
 
-        res.redirect('telco-close://localhost');
-        return callback();
-      });
-    },
+        console.log('Done. Redirecting to close url.');
 
-    function(callback) {
-      // Render VIEW
+        res.writeHead(301, {Location: 'http://webview.close'});
+        res.end();
+        return callback(true);
+      });
     }
   ], function(err) {
     if (Array.isArray(err)) {
@@ -184,86 +183,88 @@ function validateProfileView(body) {
  * The profile view containing the fields the user must complete.
  */
 function profileView() {
-  /*
+/*
 <html>
 <head>
-  <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
-  <title>Complete Profile: home_id</title>
-  <link rel="stylesheet" href="//bootswatch.com/paper/bootstrap.min.css" media="screen">
-</head>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="//code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+  <link rel="stylesheet" href="//raw.githubusercontent.com/driftyco/graphite/master/generated/slate/jquery.mobile-1.3.1.css" media="screen"></head>
 <body style="margin-top: 60px;">
-  <div class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <div class="navbar-brand">Complete Profile</div>
+  <div data-role="page">
+    <form class="form-horizontal" method="POST" id="form" style="margin: 0px;">
+      <div data-role="content">
+        <p>
+          Hi <strong><%- user.name || user.email %></strong>, we just need to know a little more about you...
+        </p>
+        <div data-role="fieldcontain">
+          <label for="country" class="select">Country</label>
+          <select name="country" id="country">
+            <option>Guatemala</option>
+            <option>El Salvador</option>
+            <option>Honduras</option>
+            <option>Paraguay</option>
+            <option>Bolivia</option>
+            <option>Colombia</option>
+            <option>United States</option>
+            <option>Argentina</option>
+            <option>Belgium</option>
+          </select>
+        </div>
+        <div data-role="fieldcontain">
+          <label for="customerNumber">Customer Number</label>
+          <input type="text" name="customerNumber" id="customerNumber" value="<%- customerNumber %>" /></div>
+        <div data-role="fieldcontain">
+          <label for="personalId">Personal ID</label>
+          <input type="text" name="personalId" id="personalId" value="<%- personalId %>" /></div>
       </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="well">
-          <form class="form-horizontal" method="POST">
-            <fieldset>
-              <legend>Hi <%- user.name || user.email %>, we just to know a little more about you...</legend>
-              <div class="form-group">
-                <label for="country" class="col-lg-4 control-label">Countries</label>
-                <div class="col-lg-8">
-                  <select class="form-control" id="country" name="country">
-                    <option>Guatemala</option>
-                    <option>El Salvador</option>
-                    <option>Honduras</option>
-                    <option>Paraguay</option>
-                    <option>Bolivia</option>
-                    <option>Colombia</option>
-                    <option>United States</option>
-                    <option>Argentina</option>
-                    <option>Belgium</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="customerNumber" class="col-lg-4 control-label">Customer Number</label>
-                <div class="col-lg-8">
-                  <input type="text" class="form-control" id="customerNumber" name="customerNumber" value="<%- customerNumber %>" placeholder="Customer Number"></div>
-              </div>
-              <div class="form-group">
-                <label for="personalId" class="col-lg-4 control-label">Personal ID</label>
-                <div class="col-lg-8">
-                  <input type="text" class="form-control" id="personalId" name="personalId" value="<%- personalId %>" placeholder="Personal Id"></div>
-              </div>
-
-              <% if (errors && errors.length) { %>
-              <div class="alert alert-danger" style="margin-bottom: 0px;">
-                <% errors.forEach(function(error){ %>
-                <p><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> 
-                  <%= error %>
-                </p>
-                <% }) %>
-              </div>
-              <% } %>
-            </div>
-
-            <div class="form-group">
-              <div class="col-lg-12">
-                <a class="btn btn-warning" href="http://telco/cancel">Cancel</a>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-
-        <pre style="margin-top: 80px;">User ID: <%- user.user_id %></pre>
+      <% if (errors && errors.length) { %>
+      <div class="ui-body ui-corner-all">
+        <div style="color: red;">
+          <% errors.forEach(function(error){ %>
+          <p>
+            <%= error %>
+          </p>
+          <% }) %>
+        </div>
       </div>
-    </div>
+      <% } %>
+      <div data-role="footer" data-position="fixed" data-fullscreen="true">
+        <div data-role="navbar">
+          <ul>
+            <li>
+              <a href="http://webview.cancel" data-icon="refresh">Cancel</a>
+            </li>
+            <li>
+              <a id="submit" href="javascript:document.getElementById('form').submit()" data-icon="check">Submit</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
   </div>
-</div>
 </body>
-<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-<script type="text/javascript">
+  <script type="text/javascript">
 $(function() {
   $("#country").val('<%- country %>');
+  $("#country").selectmenu('refresh');
+  $( document ).on( "click", "#submit", function() {
+    var $this = $( this ),
+        theme = $.mobile.loader.prototype.options.theme,
+        msgText = $.mobile.loader.prototype.options.text,
+        textVisible = $.mobile.loader.prototype.options.textVisible,
+        textonly = !!$this.jqmData( "textonly" );
+        html = $this.jqmData( "html" ) || "";
+    $.mobile.loading( "show", {
+            text: msgText,
+            textVisible: textVisible,
+            theme: theme,
+            textonly: textonly,
+            html: html
+    });
+  })
 });
 </script>
 </html>
