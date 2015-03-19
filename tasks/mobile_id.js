@@ -20,22 +20,16 @@ return function(context, req, res) {
 	};
 
 	async.series([
-
+		/*
+		 * Basic request validation.
+		 */
 		function(callback) {
 			if (!context.data.user) {
-				console.log('Unauthorized.');
-
 				res.writeHead(403);
 				res.end('User not authenticated');
 				return callback(true);
 			}
-			return callback();
-		},
-
-		function(callback) {
 			if (req.method !== 'POST' && req.method !== 'GET') {
-				console.log('Invalid VERB');
-
 				res.writeHead(404);
 				res.end('Page not found');
 				return callback(true);
@@ -43,6 +37,9 @@ return function(context, req, res) {
 			return callback();
 		},
 
+		/*
+		 * 1. GET: Render View.
+		 */
 		function(callback) {
 			if (req.method === 'GET') {
 				console.log('Rendering the view.');
@@ -53,6 +50,9 @@ return function(context, req, res) {
 			return callback();
 		},
 
+		/* 
+		 * 2. POST starts here. Validate input.
+		 */
 		function(callback) {
 			var errors = validateProfileView(context.body);
 			if (errors.length) {
@@ -63,6 +63,9 @@ return function(context, req, res) {
 			return callback();
 		},
 
+		/* 
+		 * 3. If user clicked the SMS button, generate the verification code and store in Auth0.
+		 */
 		function(callback) {
 			if (context.body.action !== 'sms')
 				return callback();
@@ -81,6 +84,9 @@ return function(context, req, res) {
 			});
 		},
 
+		/* 
+		 * 4. If user clicked the SMS button, send the verification code using Twilio.
+		 */
 		function(callback) {
 			if (context.body.action !== 'sms')
 				return callback();
@@ -102,6 +108,10 @@ return function(context, req, res) {
 				});
 		},
 
+		/* 
+		 * 5. If user clicked submit, load the verification code from the user's profile in Auth0.
+		 *    Then validate the verification code.
+		 */
 		function(callback) {
 			console.log('Loading verification code. User code: ' + context.body.verificationCode);
 
@@ -112,9 +122,8 @@ return function(context, req, res) {
 
 				if (context.body.verificationCode != verification_code) {
 					console.log('Invalid verification code. Server code: ' + verification_code);
-					return callback(new Error('Invalid verification code. Server code: ' + verification_code));
-				}
-				else if (context.body.mobilePhoneNumber != phone_number) {
+					return callback(new Error('Invalid verification code.'));
+				} else if (context.body.mobilePhoneNumber != phone_number) {
 					console.log('Invalid verification number. Server number: ' + phone_number);
 					return callback(new Error('Invalid verification number. Server number: ' + phone_number));
 				}
@@ -123,8 +132,11 @@ return function(context, req, res) {
 			});
 		},
 
+		/* 
+		 * 6. If user clicked submit, persiste the mobile_id in the user's Auth0 profile and close the Web View.
+		 */
 		function(callback) {
-			var mobileId = 'MID' + context.body.mobilePhoneNumber.replace(/\D/g,'');;
+			var mobileId = 'MID' + context.body.mobilePhoneNumber.replace(/\D/g, '');;
 			console.log('Persisting mobile_id: ' + mobileId);
 
 			persistMobileId(context.data.auth0_api_token, JSON.parse(context.data.user).user_id, mobileId, function(err) {
@@ -134,9 +146,11 @@ return function(context, req, res) {
 
 				console.log('mobile_id persisted.');
 
-		        res.writeHead(301, {Location: 'http://webview.close'});
-		        res.end();
-		        return callback(true);
+				res.writeHead(301, {
+					Location: 'http://webview.close'
+				});
+				res.end();
+				return callback(true);
 			});
 		},
 	], function(err) {

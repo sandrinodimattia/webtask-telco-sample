@@ -20,22 +20,16 @@ return function(context, req, res) {
   };
 
   async.series([
-
+    /*
+     * Basic request validation.
+     */
     function(callback) {
       if (!context.data.user) {
-        console.log('Unauthorized.');
-
         res.writeHead(403);
         res.end('User not authenticated');
         return callback(true);
       }
-      return callback();
-    },
-
-    function(callback) {
       if (req.method !== 'POST' && req.method !== 'GET') {
-        console.log('Invalid VERB');
-
         res.writeHead(404);
         res.end('Page not found');
         return callback(true);
@@ -43,6 +37,9 @@ return function(context, req, res) {
       return callback();
     },
 
+    /*
+     * 1. GET: Render View.
+     */
     function(callback) {
       if (req.method === 'GET') {
         console.log('Rendering the view.');
@@ -53,6 +50,9 @@ return function(context, req, res) {
       return callback();
     },
 
+    /* 
+     * 2. POST starts here. Validate input.
+     */
     function(callback) {
       var errors = validateProfileView(context.body);
       if (errors.length) {
@@ -63,6 +63,9 @@ return function(context, req, res) {
       return callback();
     },
 
+    /* 
+     * 3. Search in Telco CRM API.
+     */
     function(callback) {
       console.log('Searching for home_id');
 
@@ -77,6 +80,10 @@ return function(context, req, res) {
       });
     },
 
+    /*
+     * 4. Update user in Auth0 by storing the home_id.
+     *    Then close the Web View.
+     */
     function(callback) {
       console.log('Updating user in auth0');
 
