@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var textName: UILabel!
     @IBOutlet weak var textEmail: UILabel!
     @IBOutlet weak var textHomeID: UILabel!
+    @IBOutlet weak var textMobileID: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
     
     @IBOutlet weak var logoutButton: UINavigationItem!
@@ -41,6 +42,7 @@ class HomeViewController: UIViewController {
                 self.textName?.text = profile.name
                 self.textEmail?.text = profile.email
                 self.textHomeID?.text = profile.extraInfo["home_id"] as? String
+                self.textMobileID?.text = profile.extraInfo["mobile_id"] as? String
                 return
             }
         }
@@ -87,7 +89,7 @@ class HomeViewController: UIViewController {
         // Show Lock.
         let authController = A0LockViewController()
         authController.closable = false
-        authController.authenticationParameters.scopes.append("home_id")
+        authController.authenticationParameters.scopes.append("mobile_id")
         authController.onAuthenticationBlock = {(profile:A0UserProfile!, token:A0Token!) -> () in
 
             // Need to complete profile?
