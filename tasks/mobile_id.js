@@ -19,7 +19,7 @@ return function(context, req, res) {
 		}));
 	};
 
-	async.series([
+	require('async').series([
 		/*
 		 * Basic request validation.
 		 */

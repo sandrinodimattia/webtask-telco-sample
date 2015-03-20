@@ -19,20 +19,18 @@ return function(context, req, res) {
     }));
   };
 
-  async.series([
+  require('async').series([
     /*
      * Basic request validation.
      */
     function(callback) {
       if (!context.data.user) {
         res.writeHead(403);
-        res.end('User not authenticated');
-        return callback(true);
+        return res.end('User not authenticated');
       }
       if (req.method !== 'POST' && req.method !== 'GET') {
         res.writeHead(404);
-        res.end('Page not found');
-        return callback(true);
+        return res.end('Page not found');
       }
       return callback();
     },
@@ -44,8 +42,7 @@ return function(context, req, res) {
       if (req.method === 'GET') {
         console.log('Rendering the view.');
 
-        renderProfileView();
-        return callback(true);
+        return renderProfileView();
       }
       return callback();
     },
@@ -95,8 +92,7 @@ return function(context, req, res) {
         console.log('Done. Redirecting to close url.');
 
         res.writeHead(301, {Location: 'http://webview.close'});
-        res.end();
-        return callback(true);
+        return res.end();
       });
     }
   ], function(err) {

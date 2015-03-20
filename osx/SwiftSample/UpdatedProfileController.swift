@@ -20,6 +20,26 @@ class UpdatedProfileController: UIViewController {
     }
     
     @IBAction func continueClick(sender: AnyObject) {
-        navigationController?.popToRootViewControllerAnimated(true)
+        let client = A0APIClient.sharedClient()
+        let jwt = MyApplication.sharedInstance.keychain.stringForKey("temp_id_token")
+
+        client.fetchUserProfileWithIdToken(jwt,
+            success: { (response) -> Void in
+                
+                // Store temp info.
+                let keychain = MyApplication.sharedInstance.keychain
+                keychain.setString(jwt, forKey: "id_token")
+                keychain.setData(NSKeyedArchiver.archivedDataWithRootObject(response), forKey: "profile")
+                
+                // Navigate to root.
+                self.navigationController?.popToRootViewControllerAnimated(true)
+            },
+            failure: { (error) -> Void in
+                println("An error ocurred \(error)")
+                let alert = UIAlertView(title: "Error", message: error.description, delegate: nil, cancelButtonTitle: "OK")
+                alert.show()
+        })
+        
+        
     }
 }

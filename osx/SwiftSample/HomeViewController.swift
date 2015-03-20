@@ -71,6 +71,7 @@ class HomeViewController: UIViewController {
      * Logout.
      */
     @IBAction func logout(sender: AnyObject) {
+        A0IdentityProviderAuthenticator.sharedInstance().clearSessions()
         MyApplication.sharedInstance.keychain.clearAll()
         A0SimpleKeychain().clearAll()
         self.showLogin()
@@ -94,8 +95,17 @@ class HomeViewController: UIViewController {
 
             // Need to complete profile?
             if let completeProfileUrl = profile.extraInfo["complete_profile_url"] as? String {
+                
+                // Store temp info.
+                let keychain = MyApplication.sharedInstance.keychain
+                keychain.setString(token.idToken, forKey: "temp_id_token")
+                keychain.setString(token.refreshToken, forKey: "temp_refresh_token")
+                keychain.setData(NSKeyedArchiver.archivedDataWithRootObject(profile), forKey: "temp_profile")
+                
+                // Log the webtask url.
                 println("Webtask Url: " + completeProfileUrl)
                 
+                // Navigate to view and open webview.
                 self.completeProfileUrl = completeProfileUrl
                 self.performSegueWithIdentifier("completeProfile", sender: self)
                 self.dismissViewControllerAnimated(true, completion: nil)
