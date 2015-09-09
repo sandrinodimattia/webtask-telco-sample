@@ -116,7 +116,7 @@ function findHomeId(crm_api_token, data, callback) {
       'Authorization': 'Bearer ' + crm_api_token,
       'Content-Type': 'application/json'
     },
-    url: 'http://telco-profile-api.azurewebsites.net/api/home_id/validate',
+    url: 'http://telkomsel-demo-api.azurewebsites.net/api/home_id/validate',
     json: {
       country: data.country,
       personalId: data.personalId,
